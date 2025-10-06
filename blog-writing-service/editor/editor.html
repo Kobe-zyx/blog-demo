@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客编辑器 | Kobe Zhang</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="editor.css">
+    <link rel="icon" href="../img/头像.png">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body class="fade-in">
+    <header class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/%E5%A4%B4%E5%83%8F.png" alt="Logo">
+            </a>
+            <div class="nav-links-container">
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Readme</a></li>
+                        <li><a href="../blog.html">Geek</a></li>
+                        <li><a href="../timeline.html">Timeline</a></li>
+                        <li><a href="../stack.html">Stack</a></li>
+                        <li><a href="../hall.html">Hall</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="editor-main">
+        <div class="container">
+            <div class="editor-header">
+                <h1>博客编辑器</h1>
+                <div class="editor-actions">
+                    <button id="load-existing" class="button secondary">
+                        <i data-feather="edit-3"></i>
+                        编辑现有文章
+                    </button>
+                    <button id="new-post" class="button secondary">
+                        <i data-feather="plus"></i>
+                        新建文章
+                    </button>
+                    <button id="save-draft" class="button secondary">
+                        <i data-feather="save"></i>
+                        保存草稿
+                    </button>
+                    <button id="publish-post" class="button primary">
+                        <i data-feather="send"></i>
+                        发布文章
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-content">
+                <!-- 文章选择区域 -->
+                <div id="article-selector" class="article-selector" style="display: none;">
+                    <div class="form-group">
+                        <label>选择要编辑的文章</label>
+                        <div class="article-list-container">
+                            <div class="article-search">
+                                <input type="text" id="article-search" placeholder="搜索文章标题...">
+                                <i data-feather="search"></i>
+                            </div>
+                            <div id="article-list" class="article-list">
+                                <div class="loading">正在加载文章列表...</div>
+                            </div>
+                        </div>
+                        <div class="selector-actions">
+                            <button id="cancel-select" class="button secondary">取消</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editor-form">
+                    <!-- 编辑模式指示器 -->
+                    <div id="edit-mode-indicator" class="edit-mode-indicator" style="display: none;">
+                        <div class="indicator-content">
+                            <i data-feather="edit-3"></i>
+                            <span>正在编辑: <strong id="editing-filename"></strong></span>
+                            <button id="exit-edit-mode" class="button-link">退出编辑模式</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="post-title">文章标题</label>
+                        <input type="text" id="post-title" placeholder="请输入文章标题..." maxlength="100">
+                        <div class="form-help">
+                            <span id="title-counter">0/100</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="post-content">文章内容</label>
+                        <div class="editor-toolbar">
+                            <button type="button" class="toolbar-btn" data-action="bold" title="粗体">
+                                <i data-feather="bold"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="italic" title="斜体">
+                                <i data-feather="italic"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="heading" title="标题">
+                                <i data-feather="type"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="link" title="链接">
+                                <i data-feather="link"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="image" title="图片">
+                                <i data-feather="image"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="code" title="代码">
+                                <i data-feather="code"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="list" title="列表">
+                                <i data-feather="list"></i>
+                            </button>
+                        </div>
+                        <textarea id="post-content" placeholder="请输入文章内容，支持Markdown语法..." rows="20"></textarea>
+                        <div class="form-help">
+                            <span>支持Markdown语法</span>
+                            <span id="content-counter">0 字符</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>预览</label>
+                        <div id="preview-content" class="preview-area">
+                            <p class="preview-placeholder">在左侧编写内容，这里将显示实时预览...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 图片上传模态框 -->
+    <div id="image-upload-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传图片</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="upload-area">
+                    <i data-feather="upload-cloud"></i>
+                    <p>点击或拖拽图片到此处上传</p>
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                </div>
+                <div class="upload-progress" id="upload-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <p>上传中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发布确认模态框 -->
+    <div id="publish-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>发布文章</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>确定要发布这篇文章吗？</p>
+                <div class="publish-info">
+                    <p><strong>标题：</strong><span id="publish-title"></span></p>
+                    <p><strong>字数：</strong><span id="publish-word-count"></span></p>
+                </div>
+                <div class="modal-actions">
+                    <button class="button secondary" id="cancel-publish">取消</button>
+                    <button class="button primary" id="confirm-publish">确认发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知消息 -->
+    <div id="notification" class="notification"></div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Kobe_zyx. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
+        <i data-feather="arrow-up"></i>
+    </button>
+
+    <script src="../script.js"></script>
+    <script src="editor.js"></script>
+
+    <!-- 添加深浅模式切换按钮 -->
+    <button class="theme-toggle" aria-label="切换深浅模式">
+        <img src="../svg/ld/light.svg" alt="切换到浅色模式" class="light-icon">
+        <img src="../svg/ld/dark.svg" alt="切换到深色模式" class="dark-icon">
+    </button>
+</body>
+
+</html>

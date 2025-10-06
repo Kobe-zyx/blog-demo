@@ -1,0 +1,26 @@
+{
+  "name": "blog-writing-service",
+  "version": "1.0.0",
+  "description": "博客写作服务 - 为个人网站提供内容创建和管理功能",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "test": "node test-system.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "marked": "^9.1.6",
+    "multer": "^1.4.5-lts.1"
+  },
+  "keywords": [
+    "blog",
+    "cms",
+    "writing",
+    "content-management"
+  ],
+  "author": "Kobe Zhang",
+  "license": "MIT"
+}

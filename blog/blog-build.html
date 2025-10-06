@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kobe Zhang | Technical </title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="img/头像.png">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/%E5%A4%B4%E5%83%8F.png" alt="Logo">
+            </a>
+            <div class="nav-links-container">
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Readme</a></li>
+                        <li><a href="../blog.html">Geek</a></li>
+                        <li><a href="../timeline.html">Timeline</a></li>
+                        <li><a href="../stack.html">Stack</a></li>
+                        <li><a href="../hall.html">Hall</a></li>
+                    
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section id="blog-post-page" class="section" style="padding-top: calc(var(--spacing-unit) * 5);">
+        <div class="container">
+            <article class="blog-full-post active">
+                <a href="../blog.html" class="back-to-blog-list"><i data-feather="arrow-left"></i> 返回博文列表</a>
+                <div class="blog-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">
+                    <div class="blog-main-content">
+                        <h2>【经验分享】如何搭建不同的博客并择优</h2>
+                        <p class="post-meta">发布日期: 2025年6月9日</p>
+                        <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/blog-build.png" alt="AI助手">
+                        <div class="markdown-content">
+                            <h2 id="review">1.回顾</h2>
+                            <p>首先，如果没有查看往期博文【GitHub Pages + Hexo 搭建个人博客】，可以</p>
+                            <a href="hexo-blog.html" alt="选择适合自己的博客">                
+                            <p>点击此处</p>
+                        </a>
+                        <p>查看往期博文，了解后再来查看本文，完成挑选</p>
+                            <h2 id="limitation">2.局限性</h2>
+                            <p>由于本人学识浅薄，所以在一些专业技术时，讲解不深刻，或有些许错误，请各位多多担待</p>
+                            <p><strong>注意</strong>：我会讲解一些我比较熟悉的实现方式和注意事项，但一些我不了解的，不会讲解非常深入，但会指明专业博主</p>
+
+                           <h3 id="2.1">2.1主要分类</h3>
+                           <h4 id="原生开发">1.原生开发</h4> 
+                           
+                           <strong>示例</strong>：我的个人网站即为原生开发，即为本网页(https://yxblog.dpdns.org/)。开源代码如下：</p>
+                           <a href="https://github.com/Kobe-zyx/Apple-website" >点击这里</a>
+                           
+                           <h4 id="Hexo框架">2.Hexo框架</h4> 
+                           
+                           <strong>示例</strong>：我的个人博客为Hexo框架开发，即为<a href="https://kobezyx.com/" >点击这里</a>。此网站已经闭源。</p>
+                           
+                           <p><a href="https://hexo.io/zh-cn/" >Hexo官方网站</a></p>
+
+                           <p><a href="https://hexo.io/themes/" >Hexo官方主题</a></p>
+
+                           <p><a href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" >我使用的主题</a></p>
+                           <p>感谢<strong>【安知鱼】</strong>大佬的开源精神</p>
+
+                            
+                           <h2 id="applications">3.实际操作</h2>
+                            <h3 id="3.1">3.1原生开发(HTML/CSS/JavaScript)</h3> 
+                            <h4 id="3.1.1">3.1.1简易实现方式</h4>              
+                            <p>首先：如果你了解如何编写HTML/CSS/JavaScript这三者的代码，请跳转到下方查看部署到全球网络</p>
+                            <p><strong>1.</strong>利用AI工具完成代码编写。</p>
+                            <p>示例： </p>
+                            <p><a href="https://gemini.google.com/app" >Gemini 2.5 Flash -- Gemini 2.5 Pro</a> </p>
+                            <p><a href="https://claude.ai/onboarding" >Claude 3.7 Sonnet -- Claude 4 Sonnet</a> </p>
+                            <p><strong>效果最佳-Claude 4 Sonnet</strong> </p>
+                            
+                            <p><strong>1.1替换</strong>利用AI工具集成的代码编辑器完成代码编写。</p>
+                            <p>示例： </p>
+                            <p><a href="https://www.cursor.com/cn" >Cursor</a> </p>
+                            <p><a href="https://www.trae.ai/" >Trae</a> </p>
+                            <p><strong>效果最佳-Cursor</strong> </p>
+
+                            <p><strong>2.</strong>预览</p>
+                            <p>将HTML/CSS/Javascript代码放入文本编辑器里，点击HTML代码进行本地预览 </p>
+                            <strong>示例：</strong>
+                            <p>HTML代码：主页代码命名为index.html </p>
+                            <p>CSS代码：命名为style.css </p>
+                            <p>Javascript代码：命名为script.js </p>
+                            <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/PixPin_2025-06-07_15-21-51.png"/>
+                            
+                            <p><strong>3.</strong>推送</p>
+                            <p>将HTML/CSS/Javascript代码推送到CloudFlare全球网络 </p>
+                            <strong>示例：</strong>
+                            <p>打开CloudFlare，<a href="https://www.cloudflare.com/zh-cn/" >网址</a> </p>
+                            <p>注册登录账号 </p>
+                            <p>点击计算(workers)，点击创建，选择Pages，选择"使用直接上传"  </p>
+                            <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/PixPin_2025-06-07_15-28-56.png"/>
+                            <p>为项目取好名字后，上传代码，使用所给pages.dev域名即可访问，有条件可配置自定义域，我以后会出一期关于讲解域名托管CloudFlare的博文，敬请期待！  </p>
+                            
+                            <h4 id="3.1.2">3.1.2普通实现方式</h4>              
+                            <p>代码生成及预览部分与【简易实现方式】一样</p>
+                            <p>区别在于：需要在GitHub中创建一个存储库，将代码上传，再将库连接到CloudFlare</p>
+                            <p>步骤跳转至连接到CloudFlare，选择"导入现有 Git 存储库"，点击连接GitHub，授权即可，选择自己命名的存储库，部署即可，使用同样的pages.dev域名即可</p>
+                            <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/PixPin_2025-06-07_15-29-17.png"/>
+                            
+                            <h4 id="3.1.3">3.1.3普通实现方式的优势</h4> 
+                            <p><strong>1.</strong>有助于代码开源，方便实现商用</p>
+                            <p><strong>2.</strong>在源码丢失时，方便找回</p>
+                            <p><strong>3.</strong>方便与大佬进行技术交流</p>
+                            
+                            <h3 id="conclusion">3.2Hexo框架</h3>
+                            <h4 id="3.2.1">3.2.1搭建</h4>
+                            <p><strong>请务必阅读【GitHub Pages + Hexo 搭建个人博客】，本文会省略相关步骤</strong></p>
+                            <p>本文安装anzhiyu主题，但其他主题我也会进行选择讲解</p>
+                            <p>网络环境问题请自行解决，本人不在该网页提供任何帮助</p>
+                            <p>先来到安知鱼大佬的GitHub项目页，<a href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" >点击此处</a></p>
+                            <p><a href="https://docs.anheyu.com/" >作者官方安装文档</a></p>
+                            <p>根据安装文档进行安装Git，并拉取相关资源</p>
+                            <p>打开代码编辑器</p>
+                            <p>推荐：</p>
+                            <p><a href="https://code.visualstudio.com/" >VS Code</a> </p>
+                            <p>修改 hexo 配置文件_config.yml，把主题改为anzhiyu</p>
+                            <p>如果你没有 pug 以及 stylus 的渲染器，请下载安装： npm install hexo-renderer-pug hexo-renderer-stylus --save</p>
+                            <p>覆盖配置可以使主题配置放置在 anzhiyu 目录之外，避免在更新主题时丢失自定义的配置。 </p>
+                            <p>通过 Npm 安装主题的用户可忽略，其他用户建议学习使用。 </p>
+                            <p>mac os/linux 在博客根目录运行 </p>
+                            <p>cp -rf ./themes/anzhiyu/_config.yml ./_config.anzhiyu.yml </p>
+                            <p>windows 复制/themes/anzhiyu/_config.yml此文件到 hexo 根目录，并重命名为_config.anzhiyu.yml </p>
+                            <p>以后如果修改任何主题配置，都只需修改 _config.anzhiyu.yml 的配置即可。</p>
+                            
+                            <h4 id="3.2.2">3.2.2推送</h4>
+                            <p>将GitHub链接到本地存储库，然后即可推送</p>
+                            <img src="https://cdn.jsdelivr.net/gh/Kobe-zyx/PicGo@main/PixPin_2025-06-07_21-40-04.png"/>
+                            <p><strong>注意：</strong></p>
+                            <p>在仓库命名时，只能以一下形式进行命名</p>
+                            <p>【用户名.github.io】</p>
+                            <p>respository命名：【用户名/用户名.github.io.git】 ，如图所示</p>
+                            <p>其余修改可查看<a href="https://docs.anheyu.com/" >作者官方安装文档</a></p>
+                            <p><strong>预览与推送</strong> </p>
+                            <p><strong>本地预览</strong></p>
+                            <p>hexo cl 清空缓存</p>
+                            <p>hexo g 生成静态文件</p>
+                            <p>hexo s 开放端口</p>
+                        
+                            <p><strong>推送全网</strong></p>
+                            <p>hexo cl 清空缓存</p>
+                            <p>hexo g 生成静态文件</p>
+                            <p>hexo d 部署全网</p>
+                        
+                        <h2 id="footer">4.结语</h2>
+                            <p>目前我对这两种搭建比较熟悉，如果后面继续学习，则会完善这篇博文</p>
+                        
+                        
+                        </div>
+                    </div>
+                    <div class="blog-toc" style="position: sticky; top: 2rem; align-self: start; background: var(--card-bg); padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h3>目录</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin: 0.5rem 0;" class="toc-main-item"><a href="#review">1.回顾</a></li>
+                            <li style="margin: 0.5rem 0;" class="collapsible toc-main-item">
+                                <a href="#limitation">2.局限性</a>
+                                <ul class="submenu" style="list-style: none; padding-left: 20px; display: none;">
+                                    <li style="margin: 0.5rem 0;"><a href="#2.1">2.1主要分类</a>
+                                        <ul style="list-style: none; padding-left: 20px;">
+                                            <li style="margin: 0.5rem 0;"><a href="#原生开发">1.原生开发</a></li>
+                                            <li style="margin: 0.5rem 0;"><a href="#Hexo框架">2.Hexo框架</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li style="margin: 0.5rem 0;" class="collapsible toc-main-item">
+                                <a href="#applications">3.实际操作</a>
+                                <ul class="submenu" style="list-style: none; padding-left: 20px; display: none;">
+                                    <li style="margin: 0.5rem 0;"><a href="#3.1">3.1原生开发(HTML/CSS/JavaScript)</a>
+                                        <ul style="list-style: none; padding-left: 20px;">
+                                            <li style="margin: 0.5rem 0;"><a href="#3.1.1">3.1.1简易实现方式</a></li>
+                                            <li style="margin: 0.5rem 0;"><a href="#3.1.2">3.1.2普通实现方式</a></li>
+                                            <li style="margin: 0.5rem 0;"><a href="#3.1.3">3.1.3普通实现方式的优势</a></li>
+                                        </ul>
+                                    </li>
+                                    <li style="margin: 0.5rem 0;"><a href="#conclusion">3.2Hexo框架</a>
+                                        <ul style="list-style: none; padding-left: 20px;">
+                                            <li style="margin: 0.5rem 0;"><a href="#3.2.1">3.2.1搭建</a></li>
+                                            <li style="margin: 0.5rem 0;"><a href="#3.2.2">3.2.2推送</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li style="margin: 0.5rem 0;" class="toc-main-item"><a href="#footer">4.结语</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <a href="../blog.html" class="back-to-blog-list" style="margin-top: calc(var(--spacing-unit) * 4);"><i data-feather="arrow-left"></i> 返回博文列表</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- 添加底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Readme</a></li>
+                <li><a href="blog.html">Geek</a></li>
+                <li><a href="timeline.html">Timeline</a></li>
+                <li><a href="stack.html">Stack</a></li>
+                <li><a href="hall.html">Hall</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <footer>
+        <div class="container">
+            
+            <p>&copy; 2025 Kobe_zyx. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
+        <i data-feather="arrow-up"></i>
+    </button>
+
+    <script>
+        feather.replace();
+    </script>
+    <script src="../script.js"></script>
+</body>
+<!-- 添加深浅模式切换按钮 -->
+<button class="theme-toggle" aria-label="切换深浅模式">
+    <img src="../svg/ld/light.svg" alt="切换到浅色模式" class="light-icon">
+    <img src="../svg/ld/dark.svg" alt="切换到深色模式" class="dark-icon">
+</button>
+</body>
+</html>
