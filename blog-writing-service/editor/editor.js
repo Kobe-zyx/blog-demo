@@ -96,6 +96,33 @@ class BlogEditor {
         
         // 键盘快捷键
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+        
+        // 监听主题变化
+        this.observeThemeChanges();
+    }
+
+    /**
+     * 监听主题变化
+     */
+    observeThemeChanges() {
+        // 初始化时设置主题
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        this.switchHighlightTheme(currentTheme);
+        
+        // 监听主题变化
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+                    this.switchHighlightTheme(theme);
+                }
+            });
+        });
+        
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
     }
 
     /**
@@ -163,6 +190,39 @@ class BlogEditor {
         // 生成完整的预览HTML，包括目录
         const previewHtml = this.generatePreviewHtml(title, content);
         this.previewArea.innerHTML = previewHtml;
+        
+        // 应用代码高亮
+        this.applyCodeHighlight();
+    }
+
+    /**
+     * 应用代码高亮
+     */
+    applyCodeHighlight() {
+        if (typeof hljs !== 'undefined') {
+            this.previewArea.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        }
+    }
+
+    /**
+     * 切换代码高亮主题（根据页面主题）
+     */
+    switchHighlightTheme(theme) {
+        const darkTheme = document.getElementById('highlight-dark');
+        const lightTheme = document.getElementById('highlight-light');
+        
+        if (theme === 'dark') {
+            if (darkTheme) darkTheme.disabled = false;
+            if (lightTheme) lightTheme.disabled = true;
+        } else {
+            if (darkTheme) darkTheme.disabled = true;
+            if (lightTheme) lightTheme.disabled = false;
+        }
+        
+        // 重新应用高亮
+        this.applyCodeHighlight();
     }
 
     /**
@@ -326,7 +386,28 @@ class BlogEditor {
 
         let html = text;
         
+        // 保护代码块不被处理
+        const codeBlocks = [];
+        html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+            const placeholder = `__CODEBLOCK_${codeBlocks.length}__`;
+            codeBlocks.push(`<pre><code class="language-${lang || 'plaintext'}">${this.escapeHtml(code.trim())}</code></pre>`);
+            return placeholder;
+        });
+
+        // 保护行内代码
+        const inlineCodes = [];
+        html = html.replace(/`([^`]+)`/g, (match, code) => {
+            const placeholder = `__INLINECODE_${inlineCodes.length}__`;
+            inlineCodes.push(`<code>${this.escapeHtml(code)}</code>`);
+            return placeholder;
+        });
+        
         // 处理标题并添加锚点
+        html = html.replace(/^##### (.*$)/gim, (match, title) => {
+            const anchor = anchorMap[title] || this.generateAnchor(title, 0);
+            return `<h5 id="${anchor}">${title}</h5>`;
+        });
+        
         html = html.replace(/^#### (.*$)/gim, (match, title) => {
             const anchor = anchorMap[title] || this.generateAnchor(title, 0);
             return `<h4 id="${anchor}">${title}</h4>`;
@@ -347,34 +428,117 @@ class BlogEditor {
             return `<h1 id="${anchor}">${title}</h1>`;
         });
 
-        // 其他Markdown语法
+        // 处理其他Markdown语法
         html = html
-            // 粗体和斜体
-            .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-            // 代码
-            .replace(/`([^`]+)`/gim, '<code>$1</code>')
+            // 高亮标记（必须在删除线之前处理）
+            .replace(/==(.*?)==/g, '<mark>$1</mark>')
+            // 删除线
+            .replace(/~~(.*?)~~/g, '<del>$1</del>')
+            // 粗体和斜体（粗斜体）
+            .replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+            // 粗体
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/__(.*?)__/g, '<strong>$1</strong>')
+            // 斜体
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/_(.*?)_/g, '<em>$1</em>')
+            // 图片
+            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
             // 链接
-            .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>')
-            // 列表
-            .replace(/^- (.*$)/gim, '<li>$1</li>')
-            .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-            // 段落处理
-            .split('\n\n')
-            .map(paragraph => {
-                paragraph = paragraph.trim();
-                if (!paragraph) return '';
-                
-                // 如果已经是HTML标签，直接返回
-                if (paragraph.startsWith('<h') || paragraph.startsWith('<ul') || paragraph.startsWith('<li')) {
-                    return paragraph;
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+        // 按段落分割处理
+        const paragraphs = html.split('\n\n');
+        const processedParagraphs = paragraphs.map(paragraph => {
+            paragraph = paragraph.trim();
+            if (!paragraph) return '';
+            
+            // 如果已经是HTML标签，直接返回
+            if (paragraph.match(/^<(h[1-6]|pre|table|blockquote|ul|ol|hr)/)) {
+                return paragraph;
+            }
+            
+            // 处理引用块
+            if (paragraph.startsWith('>')) {
+                const quoteLines = paragraph.split('\n')
+                    .map(line => line.replace(/^>\s?/, ''))
+                    .join('<br>');
+                return `<blockquote>${quoteLines}</blockquote>`;
+            }
+            
+            // 处理无序列表
+            if (paragraph.match(/^[-*+] /m)) {
+                const items = paragraph.split('\n')
+                    .filter(line => line.match(/^[-*+] /))
+                    .map(line => `<li>${line.replace(/^[-*+] /, '')}</li>`)
+                    .join('\n');
+                return `<ul>${items}</ul>`;
+            }
+            
+            // 处理有序列表
+            if (paragraph.match(/^\d+\. /m)) {
+                const items = paragraph.split('\n')
+                    .filter(line => line.match(/^\d+\. /))
+                    .map(line => `<li>${line.replace(/^\d+\. /, '')}</li>`)
+                    .join('\n');
+                return `<ol>${items}</ol>`;
+            }
+            
+            // 处理任务列表
+            if (paragraph.match(/^- \[([ x])\] /m)) {
+                const items = paragraph.split('\n')
+                    .filter(line => line.match(/^- \[([ x])\] /))
+                    .map(line => {
+                        const checked = line.match(/^- \[x\] /) ? 'checked' : '';
+                        const text = line.replace(/^- \[([ x])\] /, '');
+                        return `<li><input type="checkbox" ${checked} disabled> ${text}</li>`;
+                    })
+                    .join('\n');
+                return `<ul class="task-list">${items}</ul>`;
+            }
+            
+            // 处理表格
+            if (paragraph.includes('|') && paragraph.includes('---')) {
+                const lines = paragraph.split('\n').filter(l => l.trim());
+                if (lines.length >= 2) {
+                    const headers = lines[0].split('|').map(h => h.trim()).filter(h => h);
+                    const rows = lines.slice(2).map(row => 
+                        row.split('|').map(cell => cell.trim()).filter(cell => cell)
+                    );
+                    
+                    let table = '<table><thead><tr>';
+                    headers.forEach(h => table += `<th>${h}</th>`);
+                    table += '</tr></thead><tbody>';
+                    rows.forEach(row => {
+                        table += '<tr>';
+                        row.forEach(cell => table += `<td>${cell}</td>`);
+                        table += '</tr>';
+                    });
+                    table += '</tbody></table>';
+                    return table;
                 }
-                
-                // 否则包装为段落
-                return `<p>${paragraph.replace(/\n/g, '<br>')}</p>`;
-            })
-            .filter(p => p)
-            .join('\n');
+            }
+            
+            // 处理分隔线
+            if (paragraph.match(/^(---|\*\*\*|___)\s*$/)) {
+                return '<hr>';
+            }
+            
+            // 普通段落
+            return `<p>${paragraph.replace(/\n/g, '<br>')}</p>`;
+        });
+
+        html = processedParagraphs.filter(p => p).join('\n');
+
+        // 恢复代码块
+        codeBlocks.forEach((code, i) => {
+            html = html.replace(`__CODEBLOCK_${i}__`, code);
+        });
+
+        // 恢复行内代码
+        inlineCodes.forEach((code, i) => {
+            html = html.replace(`__INLINECODE_${i}__`, code);
+        });
 
         return html;
     }
@@ -411,9 +575,22 @@ class BlogEditor {
                 replacement = `*${selectedText || '斜体文字'}*`;
                 cursorOffset = selectedText ? 0 : -1;
                 break;
+            case 'strikethrough':
+                replacement = `~~${selectedText || '删除线文字'}~~`;
+                cursorOffset = selectedText ? 0 : -2;
+                break;
+            case 'highlight':
+                replacement = `==${selectedText || '高亮文字'}==`;
+                cursorOffset = selectedText ? 0 : -2;
+                break;
             case 'heading':
                 replacement = `## ${selectedText || '标题'}`;
                 cursorOffset = selectedText ? 0 : -2;
+                break;
+            case 'quote':
+                const lines = (selectedText || '引用文字').split('\n');
+                replacement = lines.map(line => `> ${line}`).join('\n');
+                cursorOffset = selectedText ? 0 : -4;
                 break;
             case 'link':
                 replacement = `[${selectedText || '链接文字'}](URL)`;
@@ -426,9 +603,32 @@ class BlogEditor {
                 replacement = `\`${selectedText || '代码'}\``;
                 cursorOffset = selectedText ? 0 : -1;
                 break;
-            case 'list':
-                replacement = `- ${selectedText || '列表项'}`;
+            case 'codeblock':
+                replacement = `\`\`\`javascript\n${selectedText || '// 代码块'}\n\`\`\``;
+                cursorOffset = selectedText ? 0 : -15;
+                break;
+            case 'ul':
+                const ulLines = (selectedText || '列表项').split('\n');
+                replacement = ulLines.map(line => `- ${line}`).join('\n');
                 cursorOffset = selectedText ? 0 : -3;
+                break;
+            case 'ol':
+                const olLines = (selectedText || '列表项').split('\n');
+                replacement = olLines.map((line, i) => `${i + 1}. ${line}`).join('\n');
+                cursorOffset = selectedText ? 0 : -3;
+                break;
+            case 'checkbox':
+                const cbLines = (selectedText || '任务项').split('\n');
+                replacement = cbLines.map(line => `- [ ] ${line}`).join('\n');
+                cursorOffset = selectedText ? 0 : -3;
+                break;
+            case 'table':
+                replacement = `| 列1 | 列2 | 列3 |\n| --- | --- | --- |\n| 内容1 | 内容2 | 内容3 |\n| 内容4 | 内容5 | 内容6 |`;
+                cursorOffset = -60;
+                break;
+            case 'hr':
+                replacement = `\n---\n`;
+                cursorOffset = 0;
                 break;
         }
         
@@ -453,11 +653,29 @@ class BlogEditor {
                     e.preventDefault();
                     this.saveDraft();
                     break;
+                case 'b':
+                    e.preventDefault();
+                    this.applyFormat('bold');
+                    break;
+                case 'i':
+                    e.preventDefault();
+                    this.applyFormat('italic');
+                    break;
                 case 'Enter':
                     e.preventDefault();
                     this.showPublishModal();
                     break;
             }
+        }
+    }
+
+    /**
+     * 应用格式化（用于快捷键）
+     */
+    applyFormat(action) {
+        const btn = document.querySelector(`[data-action="${action}"]`);
+        if (btn) {
+            btn.click();
         }
     }
 

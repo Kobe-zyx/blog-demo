@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="editor.css">
     <link rel="icon" href="../img/头像.png">
+    <!-- Highlight.js 代码高亮 - 深色主题 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="highlight-dark">
+    <!-- Highlight.js 代码高亮 - 浅色主题 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css" id="highlight-light" disabled>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
@@ -96,26 +101,55 @@
                     <div class="form-group">
                         <label for="post-content">文章内容</label>
                         <div class="editor-toolbar">
-                            <button type="button" class="toolbar-btn" data-action="bold" title="粗体">
+                            <button type="button" class="toolbar-btn" data-action="bold" title="粗体 (Ctrl+B)">
                                 <i data-feather="bold"></i>
                             </button>
-                            <button type="button" class="toolbar-btn" data-action="italic" title="斜体">
+                            <button type="button" class="toolbar-btn" data-action="italic" title="斜体 (Ctrl+I)">
                                 <i data-feather="italic"></i>
                             </button>
+                            <button type="button" class="toolbar-btn" data-action="strikethrough" title="删除线">
+                                <i data-feather="minus"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="highlight" title="高亮标记">
+                                <i data-feather="sun"></i>
+                            </button>
+                            <span class="toolbar-divider"></span>
                             <button type="button" class="toolbar-btn" data-action="heading" title="标题">
                                 <i data-feather="type"></i>
                             </button>
+                            <button type="button" class="toolbar-btn" data-action="quote" title="引用">
+                                <i data-feather="message-square"></i>
+                            </button>
+                            <span class="toolbar-divider"></span>
                             <button type="button" class="toolbar-btn" data-action="link" title="链接">
                                 <i data-feather="link"></i>
                             </button>
                             <button type="button" class="toolbar-btn" data-action="image" title="图片">
                                 <i data-feather="image"></i>
                             </button>
-                            <button type="button" class="toolbar-btn" data-action="code" title="代码">
+                            <span class="toolbar-divider"></span>
+                            <button type="button" class="toolbar-btn" data-action="code" title="行内代码">
                                 <i data-feather="code"></i>
                             </button>
-                            <button type="button" class="toolbar-btn" data-action="list" title="列表">
+                            <button type="button" class="toolbar-btn" data-action="codeblock" title="代码块">
+                                <i data-feather="file-text"></i>
+                            </button>
+                            <span class="toolbar-divider"></span>
+                            <button type="button" class="toolbar-btn" data-action="ul" title="无序列表">
                                 <i data-feather="list"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="ol" title="有序列表">
+                                <i data-feather="hash"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="checkbox" title="任务列表">
+                                <i data-feather="check-square"></i>
+                            </button>
+                            <span class="toolbar-divider"></span>
+                            <button type="button" class="toolbar-btn" data-action="table" title="表格">
+                                <i data-feather="grid"></i>
+                            </button>
+                            <button type="button" class="toolbar-btn" data-action="hr" title="分隔线">
+                                <i data-feather="more-horizontal"></i>
                             </button>
                         </div>
                         <textarea id="post-content" placeholder="请输入文章内容，支持Markdown语法..." rows="20"></textarea>

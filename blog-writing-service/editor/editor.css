@@ -722,3 +722,202 @@
 [data-theme="dark"] .article-item:hover {
     background-color: var(--hover-color);
 }
+
+/* 新增 Markdown 元素样式 */
+.preview-area blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: calc(var(--spacing-unit) * 2);
+    margin: calc(var(--spacing-unit) * 2) 0;
+    color: var(--secondary-text-color);
+    font-style: italic;
+    background-color: var(--background-dark);
+    padding: calc(var(--spacing-unit) * 2);
+    border-radius: 4px;
+}
+
+.preview-area del {
+    text-decoration: line-through;
+    color: var(--secondary-text-color);
+}
+
+.preview-area mark {
+    background-color: #fff59d;
+    color: #000;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .preview-area mark {
+    background-color: #ffd54f;
+    color: #000;
+}
+
+.preview-area ul,
+.preview-area ol {
+    margin: calc(var(--spacing-unit) * 2) 0;
+    padding-left: calc(var(--spacing-unit) * 4);
+}
+
+.preview-area ul li,
+.preview-area ol li {
+    margin: calc(var(--spacing-unit)) 0;
+    line-height: 1.6;
+}
+
+.preview-area ul.task-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.preview-area ul.task-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--spacing-unit));
+}
+
+.preview-area ul.task-list input[type="checkbox"] {
+    margin-top: 4px;
+    cursor: not-allowed;
+}
+
+.preview-area pre {
+    background-color: var(--background-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: calc(var(--spacing-unit) * 2);
+    overflow-x: auto;
+    margin: calc(var(--spacing-unit) * 2) 0;
+}
+
+.preview-area pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    display: block;
+}
+
+.preview-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: calc(var(--spacing-unit) * 2) 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-area table th,
+.preview-area table td {
+    padding: calc(var(--spacing-unit) * 1.5);
+    text-align: left;
+    border: 1px solid var(--border-color);
+}
+
+.preview-area table th {
+    background-color: var(--background-dark);
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.preview-area table tr:nth-child(even) {
+    background-color: var(--background-dark);
+}
+
+.preview-area table tr:hover {
+    background-color: var(--hover-color);
+}
+
+.preview-area hr {
+    border: none;
+    border-top: 2px solid var(--border-color);
+    margin: calc(var(--spacing-unit) * 4) 0;
+}
+
+.preview-area img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: calc(var(--spacing-unit) * 2) 0;
+    display: block;
+}
+
+/* 工具栏分隔符 */
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+    margin: 0 calc(var(--spacing-unit) / 2);
+}
+
+/* 代码高亮样式增强 */
+.preview-area pre {
+    position: relative;
+    background-color: #282c34 !important;
+    border: 1px solid #3e4451;
+}
+
+.preview-area pre code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: #abb2bf;
+}
+
+/* 确保 highlight.js 样式生效 */
+.preview-area pre code.hljs {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* 行内代码保持原样式 */
+.preview-area p code,
+.preview-area li code,
+.preview-area td code,
+.preview-area blockquote code {
+    background-color: rgba(224, 108, 117, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #e06c75;
+    border: 1px solid rgba(224, 108, 117, 0.2);
+}
+
+/* 深色模式下的行内代码 */
+[data-theme="dark"] .preview-area p code,
+[data-theme="dark"] .preview-area li code,
+[data-theme="dark"] .preview-area td code,
+[data-theme="dark"] .preview-area blockquote code {
+    background-color: rgba(152, 195, 121, 0.1);
+    color: #98c379;
+    border: 1px solid rgba(152, 195, 121, 0.2);
+}
+
+/* 浅色模式下的代码块 */
+[data-theme="light"] .preview-area pre {
+    background-color: #fafafa !important;
+    border: 1px solid #e0e0e0;
+}
+
+[data-theme="light"] .preview-area pre code {
+    color: #383a42;
+}
+
+/* 深色模式下的新增元素 */
+[data-theme="dark"] .preview-area blockquote {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .preview-area pre {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .preview-area table th {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .preview-area table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+}

@@ -28,6 +28,31 @@ const BlogListManager = require('./utils/BlogListManager');
 const fs = require('fs').promises;
 const marked = require('marked');
 
+// 配置 marked 以支持自定义语法
+marked.use({
+    extensions: [
+        {
+            name: 'highlight',
+            level: 'inline',
+            start(src) { return src.match(/==/)?.index; },
+            tokenizer(src) {
+                const rule = /^==([^=]+)==/;
+                const match = rule.exec(src);
+                if (match) {
+                    return {
+                        type: 'highlight',
+                        raw: match[0],
+                        text: match[1].trim()
+                    };
+                }
+            },
+            renderer(token) {
+                return `<mark>${token.text}</mark>`;
+            }
+        }
+    ]
+});
+
 const fileManager = new FileManager();
 
 // 博文API路由
@@ -596,6 +621,10 @@ function extractMarkdownFromHtml(htmlContent) {
             .replace(/<h6[^>]*(?:id="([^"]*)")?[^>]*>(.*?)<\/h6>/gi, '###### $2')
             // 转换段落
             .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, '$1\n\n')
+            // 转换高亮标记
+            .replace(/<mark[^>]*>(.*?)<\/mark>/gi, '==$1==')
+            // 转换删除线
+            .replace(/<del[^>]*>(.*?)<\/del>/gi, '~~$1~~')
             // 转换粗体和斜体
             .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
             .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
